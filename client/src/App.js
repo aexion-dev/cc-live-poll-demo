@@ -1,77 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
-import {
-  initiateSocket,
-  disconnectSocket,
-  subscribeToChat,
-  switchRooms,
-  loadChatHistory,
-  sendMessage } from './socket.utils';
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+
+import HomePage from './pages/home_page';
+import Chat from './components/chat/chat';
 
 function App() {
-  const rooms = ['A', 'B', 'C'];
-  const [room, setRoom] = useState(rooms[0]);
-  const [message, setMessage] = useState('');
-  const [chat, setChat] = useState([]);
-
-  //Keep track of previous room
-  const prevRoomRef = useRef();
-  useEffect(() => {
-    prevRoomRef.current = room;
-  });
-  const prevRoom = prevRoomRef.current;
-
-  //Handle Room Switch/Join
-  useEffect(() => {
-    if(prevRoom && room)
-      switchRooms(prevRoom, room);
-    else if(room)
-      initiateSocket(room);
-
-    setChat([]);
-  }, [room]);
-
-  //Load Room's Chat History
-  useEffect(() => {
-    loadChatHistory((err, data) => {
-      if(err || !data)
-        return;
-
-      setChat(data);
-    })
-  }, [])
-
-  useEffect(() => {
-    subscribeToChat((err, data) => {
-      if(err)
-        return;
-
-      setChat(oldChats => [data, ...oldChats]);
-    });
-
-    // return () => {
-    //   disconnectSocket();
-    // }
-  }, []);
-
   return (
-    <div className="App">
-      <h1>Room: {room}</h1>
-      {
-        rooms.map((r, i) =>
-        <button onClick={() => setRoom(r)} key={i}>{r}</button>)
-      }
-
-      <h1>Live Chat:</h1>
-      <input
-        type="text"
-        name="name"
-        value={message}
-        onChange={e => setMessage(e.target.value)} />
-      <button onClick={()=> {
-        setChat(oldChats => [message, ...oldChats]);
-        sendMessage(room,message);
-      }}>Send</button>
-      { chat.map((m,i) => <p key={i}>{m}</p>) }
+    <div>
+      <Switch>
+        <Route exact path='/' component={HomePage}/>
+        <Route exact path='/speaker' component={Chat}/>
+        <Route exact path='/view' component={Chat}/>
+      </Switch>
     </div>
   );
 }
