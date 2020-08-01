@@ -20,6 +20,7 @@ function App() {
   });
   const prevRoom = prevRoomRef.current;
 
+  //Handle Room Switch/Join
   useEffect(() => {
     if(prevRoom && room)
       switchRooms(prevRoom, room);
@@ -29,6 +30,7 @@ function App() {
     setChat([]);
   }, [room]);
 
+  //Load Room's Chat History
   useEffect(() => {
     loadChatHistory((err, data) => {
       if(err || !data)

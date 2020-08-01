@@ -1,5 +1,16 @@
-var http = require('http').createServer().listen(4000);
-var io = require('socket.io').listen(http);
+const express = require('express');
+const path = require('path');
+const http = require('http');
+const socketIo = require('socket.io');
+
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
+const app = express();
+const port = process.env.PORT || 4000;
+const server = http.createServer(app);
+const io = socketIo(server);
 
 const socketHistory = {};
 
@@ -41,3 +52,8 @@ io.on('connection', (socket) => {
       : [data.message];
   });
 })
+
+server.listen(port, error => {
+  if (error) throw error;
+  console.log('Server running on port: ' + port);
+});
