@@ -18,9 +18,10 @@ io.on('connection', (socket) => {
   console.log(`Connected ${socket.id}`);
   let socketRoom;
 
-  socket.on('disconnect', () =>
-    console.log(`Disconnected: ${socket.id}`));
+  socket.on('disconnect', () => {
+    console.log(`Disconnected: ${socket.id}`);
     socketRoom = null;
+  });
 
   socket.on('join', (room) => {
     console.log(`Socket ${socket.id} joining ${room}`)

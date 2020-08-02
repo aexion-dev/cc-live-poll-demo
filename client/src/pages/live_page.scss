@@ -1,0 +1,98 @@
+.live-page-wrapper {
+  height: 100vh;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+
+  .live-page {
+    height: 100%;
+    overflow-x: hidden;
+
+    @media (min-width: 1000px) {
+      display: flex;
+      flex: 100%;
+    }
+
+    .live-stream {
+      height: 400px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+
+      @media (min-width: 1000px) {
+        height: 100%;
+        width: calc(100% - 480px);
+      }
+
+      .live-stage {
+        height: 100%;
+        width: 100%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        flex: auto;
+
+        .stage-content {
+          height: 100%;
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: #000;
+
+          .video-stream {
+            height: calc(100vw / 2);
+            max-height: 100%;
+            width: 100%;
+            background-image:url('https://s3.amazonaws.com/talkstar-photos/uploads/0a95ffba-8cfe-4d9c-8913-736275f78bf9/MatthewWalker_2019-embed.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+
+            @media (min-width: 600px) {
+              background-size: contain;
+            }
+          }
+        }
+      }
+    }
+
+    .live-sidebar {
+      height: calc(100% - 400px);
+      min-height: 400px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      background: #FFF;
+
+      @media(min-width: 1000px) {
+        height: 100%;
+        width: 480px;
+      }
+
+      .nav-tabs {
+        flex-wrap: nowrap;
+        justify-content: space-around;
+        border: none;
+
+        .nav-item {
+          max-height: 50px;
+          width: 100%;
+          position: relative;
+          display: block;
+          border: none;
+          padding: 12px 16px 16px 16px;
+          color: #b9b9b9;
+          font-weight: bold;
+          text-align: center;
+
+          &.active {
+            color: #272727;
+          }
+        }
+      }
+    }
+  }
+}
