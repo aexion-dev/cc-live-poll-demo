@@ -1,35 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { selectUser } from '../../redux/user/user.selectors';
 import {
-  initiateSocket,
-  disconnectSocket,
   subscribeToChat,
-  switchRooms,
   loadChatHistory,
   sendMessage } from '../../socket.utils';
 
 
 const Chat = () => {
-  const rooms = ['A', 'B', 'C'];
-  const [room, setRoom] = useState(rooms[0]);
   const [message, setMessage] = useState('');
   const [chat, setChat] = useState([]);
-
-  //Keep track of previous room
-  const prevRoomRef = useRef();
-  useEffect(() => {
-    prevRoomRef.current = room;
-  });
-  const prevRoom = prevRoomRef.current;
-
-  //Handle Room Switch/Join
-  useEffect(() => {
-    if(prevRoom && room)
-      switchRooms(prevRoom, room);
-    else if(room)
-      initiateSocket(room);
-
-    setChat([]);
-  }, [room]);
 
   //Load Room's Chat History
   useEffect(() => {
@@ -56,12 +37,6 @@ const Chat = () => {
 
   return (
     <div className="chat">
-      <h1>Room: {room}</h1>
-      {
-        rooms.map((r, i) =>
-        <button onClick={() => setRoom(r)} key={i}>{r}</button>)
-      }
-
       <h1>Live Chat:</h1>
       <input
         type="text"
@@ -70,11 +45,16 @@ const Chat = () => {
         onChange={e => setMessage(e.target.value)} />
       <button onClick={()=> {
         setChat(oldChats => [message, ...oldChats]);
-        sendMessage(room,message);
+        console.log(chat);
+        sendMessage(message);
       }}>Send</button>
       { chat.map((m,i) => <p key={i}>{m}</p>) }
     </div>
   );
 }
 
-export default Chat;
+const mapStateToProps = createStructuredSelector({
+  user: selectUser
+});
+
+export default connect(mapStateToProps)(Chat);

@@ -1,16 +1,23 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { selectUser } from '../redux/user/user.selectors';
+import { joinSession } from '../socket.utils';
+//import { loadSessionStart } from '../redux/session/session.actions';
+import Chat from '../components/chat/chat';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
-import Chat from '../components/chat/chat';
 import './live_page.scss';
 
-const LivePage = () => {
-
+const LivePage = ({ user, match }) => {
   const [key, setKey] = useState('chat');
+  const { name, socket } = user;
 
   useEffect(() => {
-    //
-  });
+    if(socket) {
+      joinSession(match.params.socketId);
+    }
+  }, [socket]);
 
   return (
     <div className="live-page-wrapper">
@@ -32,10 +39,10 @@ const LivePage = () => {
               <Chat />
             </Tab>
             <Tab eventKey="questions" title="Questions">
-              <div>Questions</div>
+
             </Tab>
             <Tab eventKey="polls" title="Polls">
-              <div>Polls</div>
+
             </Tab>
           </Tabs>
         </div>
@@ -44,4 +51,12 @@ const LivePage = () => {
   )
 };
 
-export default LivePage;
+const mapStateToProps = createStructuredSelector({
+  user: selectUser
+});
+
+// const mapDispatchToProps = (dispatch) => ({
+//   loadSessionStart: (sessionId) => dispatch(loadSessionStart(sessionId))
+// });
+
+export default connect(mapStateToProps)(LivePage);

@@ -1,31 +1,68 @@
 import io from 'socket.io-client';
 let socket; //dont init, allow client to handle connection
 
-export const initiateSocket = (room) => {
-  socket = io();
-  console.log(`Connecting to socket..`);
+export const initiateSocket = async () => {
+  return new Promise((resolve, reject) => {
+    socket = io();
+    console.log(`Connecting to socket..`);
 
-  if(socket && room)
-    socket.emit('join', room);
+    socket.on('connect', () => {
+      resolve(socket.id);
+    });
+  })
 }
 
 export const disconnectSocket = () => {
   console.log('Disconnecting socket..');
+  console.log(socket);
   if(socket)
+    socket.off('connect');
     socket.disconnect();
 }
 
-export const switchRooms = (prevRoom, nextRoom) => {
-  if(socket)
-    socket.emit('switch', { prevRoom, nextRoom });
+export const loadSessionList = (cb) => {
+  if(!socket)
+    return (true);
+
+  socket.on('loadSessions', msg => {
+    console.log('Recieved Sessions List!');
+    return cb(null, msg);
+    });
+}
+
+export const subscribeToSessionList = (cb) => {
+  if(!socket)
+    return (true);
+
+  socket.on('sessionUpdate', sessions => {
+    console.log('Session Update received!');
+    return cb(null, sessions);
+  })
+}
+
+export const joinSession = (sessionId) => {
+  console.log(`Joining room ${sessionId}..`);
+
+  if(socket && sessionId)
+    socket.emit('join', sessionId);
 }
 
 export const loadChatHistory = (cb) => {
   if(!socket)
     return (true);
-    
+
   socket.on('joinResponse', msg => {
-    console.log('Join Response received!')
+    console.log('Join Response received!');
+    return cb(null, msg);
+    });
+}
+
+export const loadSessionHistory = (cb) => {
+  if(!socket)
+    return (true);
+
+  socket.on('joinResponse', msg => {
+    console.log('Join Response received!');
     return cb(null, msg);
     });
 }
