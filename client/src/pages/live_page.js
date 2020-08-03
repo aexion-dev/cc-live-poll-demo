@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import Chat from '../components/chat/chat';
@@ -7,6 +7,10 @@ import './live_page.scss';
 const LivePage = () => {
 
   const [key, setKey] = useState('chat');
+
+  useEffect(() => {
+    //
+  });
 
   return (
     <div className="live-page-wrapper">
