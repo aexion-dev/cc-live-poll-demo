@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { selectUser } from '../../redux/user/user.selectors';
+import { selectPolls } from '../../redux/session/session.selectors';
+import { sendPollMessage } from '../../redux/session/session.actions';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Col from 'react-bootstrap/Col';
 
-const CreatePoll = () => {
+const CreatePoll = ({ user, polls, sendPollMessage }) => {
   const [showForm, setShowForm] = useState(false);
   const [formValues, setFormValues] = useState({
     question: "",
-    options: ["", ""]
+    options: []
   });
 
   const handleChange = (event) => {
@@ -44,7 +49,7 @@ const CreatePoll = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formValues);
+    sendPollMessage(formValues);
   }
 
   return (
@@ -64,18 +69,18 @@ const CreatePoll = () => {
             </Form.Group>
 
             <Form.Row>
-              <Form.Group as={Col} controlId="pollOptions">
+              <Form.Group as={Col}>
                 <Form.Label>Options</Form.Label>
                 {
                   Object.keys(formValues.options).map((option, idx) => (
-                    <InputGroup key={idx} className="mt-4">
-                      <Form.Control type="text" onChange={handleOptionChange} />
-                      {idx > 1 &&
-                        <InputGroup.Append>
-                          <Button variant="dark" onClick={removeClick.bind(null, idx)}>-</Button>
-                        </InputGroup.Append>
-                      }
-                    </InputGroup>
+                    <Form.Group key={idx} controlId={idx}>
+                      <InputGroup className="mt-4">
+                        <Form.Control as="input" type="text" onChange={handleOptionChange} />
+                          <InputGroup.Append>
+                            <Button variant="dark" onClick={removeClick.bind(null, idx)}>-</Button>
+                          </InputGroup.Append>
+                      </InputGroup>
+                    </Form.Group>
                   ))
                 }
               </Form.Group>
@@ -97,4 +102,13 @@ const CreatePoll = () => {
   )
 }
 
-export default CreatePoll;
+const mapStateToProps = createStructuredSelector({
+  polls: selectPolls
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  sendPollMessage: (msg) => dispatch(sendPollMessage(msg))
+});
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreatePoll);

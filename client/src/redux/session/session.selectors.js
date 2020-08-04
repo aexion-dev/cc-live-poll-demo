@@ -11,3 +11,8 @@ export const selectChat = createSelector(
   [selectCurrentSession],
   currentSession => currentSession.chat
 );
+
+export const selectPolls = createSelector(
+  [selectCurrentSession],
+  currentSession => currentSession.polls
+);

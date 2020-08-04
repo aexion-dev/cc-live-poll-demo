@@ -24,3 +24,13 @@ export const receivedChatMessage = (msg) => ({
   type: SessionActionTypes.RECEIVED_CHAT_MESSAGE,
   payload: msg
 });
+
+export const sendPollMessage = (msg) => ({
+  type: SessionActionTypes.SEND_POLL_MESSAGE,
+  payload: msg
+});
+
+export const receivedPollMessage = (msg) => ({
+  type: SessionActionTypes.RECEIVED_POLL_MESSAGE,
+  payload: msg
+});

@@ -39,6 +39,19 @@ const sessionReducer = (state = INITIAL_STATE, action) => {
         },
         error: null
       }
+      case SessionActionTypes.SEND_POLL_MESSAGE:
+      case SessionActionTypes.RECEIVED_POLL_MESSAGE:
+        return {
+          ...state,
+          currentSession: {
+            ...state.currentSession,
+            polls: [
+              ...state.currentSession.polls,
+              action.payload
+            ]
+          },
+          error: null
+        }
     default:
       return state;
   }
