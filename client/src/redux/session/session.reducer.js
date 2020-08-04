@@ -26,6 +26,18 @@ const sessionReducer = (state = INITIAL_STATE, action) => {
         ...state,
         error: action.payload
       }
+    case SessionActionTypes.SEND_CHAT_MESSAGE:
+      return {
+        ...state,
+        currentSession: {
+          ...state.currentSession,
+          chat: [
+            ...state.currentSession.chat,
+            action.payload
+          ]
+        },
+        error: null
+      }
     default:
       return state;
   }

@@ -1,0 +1,53 @@
+.chat-history {
+  height: 100%;
+  overflow-y: scroll;
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.message-info {
+  color: #adb5bd;
+  margin-bottom: 5px;
+
+  .message-info-time {
+    padding: 0px 5px;
+    font-size: .8rem;
+  }
+
+  .message-info-name {
+    font-weight: bold;
+    padding: 0px 5px;
+    font-size: .9rem;
+  }
+}
+
+.message-body {
+  color: #495057;
+  background-color: #e9ecef;
+  padding: 8px 20px;
+  line-height: 1.5;
+  font-size: .9rem;
+  font-weight: bold;
+  border-radius: 30px 30px 30px 30px;
+  margin-bottom: 15px;
+  width: fit-content;
+  max-width: 90%;
+  position: relative;
+}
+
+.user-message {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-end;
+
+  .message-info {
+    display: flex;
+    flex-direction: row-reverse;
+    color: #6c757d;
+  }
+
+  .message-body {
+    color: #ffffff;
+    background-color: #007bff;
+  }
+}

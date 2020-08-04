@@ -8,7 +8,6 @@ const selectIndex = (sessionId) => {
 }
 
 const sessionExists = (sessionId) => {
-  console.log(sessions);
   if(sessions.some(session => session.id === sessionId)) {
     return true;
   }

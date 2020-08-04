@@ -10,7 +10,7 @@ import './live_page.scss';
 
 const LivePage = ({ user, match, joinSessionStart }) => {
   const [key, setKey] = useState('chat');
-  const { name, socket } = user;
+  const { socket } = user;
 
   useEffect(() => {
     if(socket) {

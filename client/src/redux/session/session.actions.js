@@ -14,3 +14,8 @@ export const joinSessionFailure = (error) => ({
   type: SessionActionTypes.JOIN_SESSION_FAILURE,
   payload: error
 });
+
+export const sendChatMessage = (msg) => ({
+  type: SessionActionTypes.SEND_CHAT_MESSAGE,
+  payload: msg
+});

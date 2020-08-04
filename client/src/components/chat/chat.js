@@ -3,20 +3,20 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectUser } from '../../redux/user/user.selectors';
 import { selectChat } from '../../redux/session/session.selectors';
+import { sendChatMessage } from '../../redux/session/session.actions';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
 import {
   subscribeToChat,
-  loadChatHistory,
   sendMessage } from '../../socket.utils';
 import './chat.scss';
 
 
-const Chat = ({ user, chat }) => {
+const Chat = ({ user, chat, sendChatMessage }) => {
   const [message, setMessage] = useState('');
-  const [localChat, setLocalChat] = useState([]);
+  const { displayName, socket } = user;
   //const [chat, setChat] = useState([]);
 
   // useEffect(() => {
@@ -32,15 +32,30 @@ const Chat = ({ user, chat }) => {
   //   // }
   // }, []);
 
+  const handleMessage = (msg) => {
+    if(!user || !msg | msg.length < 1)
+      return;
+
+    const date = new Date();
+    sendChatMessage({msg, displayName, senderId: socket, date});
+  }
+
   return (
     <div className="chat d-flex flex-column h-100">
-      <ListGroup as="ul">
+      <ListGroup as="ul" className="chat-history">
         {
-          chat.map((msg, idx) => (
+          chat.map(({msg, senderId, displayName, date}, idx) => (
             <ListGroup.Item
               as="li"
+              className={`border-0 ${senderId === socket ? 'user-message' : null}`}
               key={idx}>
-                {msg}
+                <div className="message-info">
+                  <span className="message-info-name" >{displayName}</span>
+                  <span className="message-info-time" >{date.toLocaleString()}</span>
+                </div>
+                <div className="message-body">
+                  {msg}
+                </div>
               </ListGroup.Item>
           ))
         }
@@ -56,33 +71,13 @@ const Chat = ({ user, chat }) => {
           onChange={e => setMessage(e.target.value)} />
         <InputGroup.Append>
           <Button
-            variant="outline-secondary"
             onClick={() => {
-              setLocalChat(oldChats => [message, ...oldChats]);
-              console.log(localChat);
-              sendMessage(message);
+              handleMessage(message);
             }}>Send</Button>
         </InputGroup.Append>
       </InputGroup>
     </div>
   )
-
-  // return (
-  //   <div className="chat">
-  //     <h1>Live Chat:</h1>
-  //     <input
-  //       type="text"
-  //       name="name"
-  //       value={message}
-  //       onChange={e => setMessage(e.target.value)} />
-  //     <button onClick={()=> {
-  //       setChat(oldChats => [message, ...oldChats]);
-  //       console.log(chat);
-  //       sendMessage(message);
-  //     }}>Send</button>
-  //     { chat.map((m,i) => <p key={i}>{m}</p>) }
-  //   </div>
-  // );
 }
 
 const mapStateToProps = createStructuredSelector({
@@ -90,4 +85,8 @@ const mapStateToProps = createStructuredSelector({
   chat: selectChat,
 });
 
-export default connect(mapStateToProps)(Chat);
+const mapDispatchToProps = (dispatch) => ({
+  sendChatMessage: (msg) => dispatch(sendChatMessage(msg))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Chat);
