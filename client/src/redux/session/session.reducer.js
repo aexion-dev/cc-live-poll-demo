@@ -1,19 +1,19 @@
 import SessionActionTypes from './session.types';
 
 const INITIAL_STATE = {
-  session: null,
+  currentSession: null,
   error: null
 }
 
 const sessionReducer = (state = INITIAL_STATE, action) => {
   switch(action.type) {
-    case SessionActionTypes.LOAD_SESSION_SUCCESS:
+    case SessionActionTypes.JOIN_SESSION_SUCCESS:
       return {
         ...state,
-        session: action.payload,
+        currentSession: action.payload,
         error: null
       }
-    case SessionActionTypes.LOAD_SESSION_FAILURE:
+    case SessionActionTypes.JOIN_SESSION_FAILURE:
       return {
         ...state,
         error: action.payload

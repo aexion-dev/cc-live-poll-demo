@@ -40,11 +40,18 @@ export const subscribeToSessionList = (cb) => {
   })
 }
 
-export const joinSession = (sessionId) => {
-  console.log(`Joining room ${sessionId}..`);
+export const joinSession = async (sessionId) => {
+  return new Promise((resolve, reject) => {
+    console.log(`Joining room ${sessionId}..`);
 
-  if(socket && sessionId)
-    socket.emit('join', sessionId);
+    if(socket && sessionId) {
+      socket.emit('join', sessionId);
+
+      socket.on('loadSessionHistory', (data) => {
+        resolve(data);
+      })
+    }
+  })
 }
 
 export const loadChatHistory = (cb) => {

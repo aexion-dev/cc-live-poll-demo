@@ -1,29 +1,26 @@
 import { takeLatest, put, all, call } from 'redux-saga/effects';
 import SessionActionTypes from './session.types';
-import { loadSessionHistory, joinSession } from '../../socket.utils';
+import { joinSession } from '../../socket.utils';
 import {
-  loadSessionSuccess,
-  loadSessionFailure
+  joinSessionSuccess,
+  joinSessionFailure,
 } from './session.actions';
 
-export function* loadSession({payload: { sessionId }}) {
-  console.log(sessionId);
+export function* joinSessionStart({ payload: { sessionId }}) {
   try {
-    yield console.log(sessionId);
-    yield joinSession(sessionId);
-    const session = yield loadSessionHistory(sessionId);
-    yield put(loadSessionSuccess(session));
+    const session = yield joinSession(sessionId);
+    yield put(joinSessionSuccess(session));
   } catch(error) {
-    put(loadSessionFailure(error));
+    put(joinSessionFailure(error));
   }
 }
 
-export function* onLoadSessionStart() {
-  yield takeLatest(SessionActionTypes.LOAD_SESSION_START, loadSession);
+export function* onJoinSessionStart() {
+  yield takeLatest(SessionActionTypes.JOIN_SESSION_START, joinSessionStart);
 }
 
 export function* sessionSagas() {
   yield all([
-    call(onLoadSessionStart)
+    call(onJoinSessionStart)
   ])
 }

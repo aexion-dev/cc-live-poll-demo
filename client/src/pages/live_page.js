@@ -2,20 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectUser } from '../redux/user/user.selectors';
-import { joinSession } from '../socket.utils';
-//import { loadSessionStart } from '../redux/session/session.actions';
-import Chat from '../components/chat/chat';
+import { joinSessionStart } from '../redux/session/session.actions';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import './live_page.scss';
 
-const LivePage = ({ user, match }) => {
+const LivePage = ({ user, match, joinSessionStart }) => {
   const [key, setKey] = useState('chat');
   const { name, socket } = user;
 
   useEffect(() => {
     if(socket) {
-      joinSession(match.params.socketId);
+      joinSessionStart(match.params.socketId);
     }
   }, [socket]);
 
@@ -36,7 +34,6 @@ const LivePage = ({ user, match }) => {
             activeKey={key}
             onSelect={(k) => setKey(k)}>
             <Tab eventKey="chat" title="Chat">
-              <Chat />
             </Tab>
             <Tab eventKey="questions" title="Questions">
 
@@ -55,8 +52,8 @@ const mapStateToProps = createStructuredSelector({
   user: selectUser
 });
 
-// const mapDispatchToProps = (dispatch) => ({
-//   loadSessionStart: (sessionId) => dispatch(loadSessionStart(sessionId))
-// });
+const mapDispatchToProps = (dispatch) => ({
+  joinSessionStart: (sessionId) => dispatch(joinSessionStart({sessionId}))
+});
 
-export default connect(mapStateToProps)(LivePage);
+export default connect(mapStateToProps, mapDispatchToProps)(LivePage);

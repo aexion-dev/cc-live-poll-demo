@@ -38,24 +38,24 @@ io.on('connection', (socket) => {
     socketRoom = null;
   });
 
-  socket.on('join', (room) => {
+  socket.on('join', async (room) => {
     console.log(`Client ${socket.id} is joining Session ${room}`)
     const index = session.selectIndex(room);
 
     if(session.sessionExists(room)) {
       console.log("Session Found! ID: ", room);
-      session.joinSession(socket.id, room);
-      socket.join(room);
+      const sessionHistory = await session.joinSession(socket.id, room);
+      await socket.join(room);
+      await socket.emit('loadSessionHistory', sessionHistory);
       socketRoom = room;
-      console.log('SESSION',state.sessions[index]);
-      socket.emit('joinResponse', socketHistory[room]);
     } else if (room === socket.id) {
       console.log("Creating New Session ID: ", room);
-      session.createSession(room);
+      const sessionHistory = await session.createSession(room);
+      await socket.emit('loadSessionHistory', sessionHistory);
       socketRoom = room;
-      socket.emit('joinResponse', socketHistory[room]);
     } else {
       console.log("Session Not Found!");
+      //need to return client to select screen
     }
   });
 

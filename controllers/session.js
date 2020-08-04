@@ -16,7 +16,7 @@ const sessionExists = (sessionId) => {
 };
 
 const createSession = (sessionId) => {
-    sessions.push({
+    const newSession = {
       id: sessionId,
       name: null,
       owner: null,
@@ -24,9 +24,11 @@ const createSession = (sessionId) => {
       chat: [],
       questions: [],
       polls: []
-    });
+    };
+    sessions.push(newSession);
 
     state = {...state, sessions: sessions};
+    return(newSession);
 }
 
 const joinSession = (userId, sessionId) => {
@@ -36,6 +38,7 @@ const joinSession = (userId, sessionId) => {
   }
 
   state = {...state, sessions: sessions};
+  return(state.sessions[index]);
 }
 
 const closeSession = (sessionId) => {
