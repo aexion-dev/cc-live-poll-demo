@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectUser } from '../redux/user/user.selectors';
 import { joinSessionStart } from '../redux/session/session.actions';
+import Chat from '../components/chat/chat';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import './live_page.scss';
@@ -34,6 +35,7 @@ const LivePage = ({ user, match, joinSessionStart }) => {
             activeKey={key}
             onSelect={(k) => setKey(k)}>
             <Tab eventKey="chat" title="Chat">
+              <Chat />
             </Tab>
             <Tab eventKey="questions" title="Questions">
 

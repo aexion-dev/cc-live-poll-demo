@@ -1,7 +1,15 @@
 import SessionActionTypes from './session.types';
 
 const INITIAL_STATE = {
-  currentSession: null,
+  currentSession: {
+    id: null,
+    name: null,
+    owner: null,
+    users: [],
+    chat: [],
+    questions: [],
+    polls: []
+  },
   error: null
 }
 
