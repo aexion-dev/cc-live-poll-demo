@@ -4,19 +4,31 @@ import { createStructuredSelector } from 'reselect';
 import { selectUser } from '../redux/user/user.selectors';
 import { joinSessionStart } from '../redux/session/session.actions';
 import Chat from '../components/chat/chat';
+import Polls from '../components/polls/polls';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import './live_page.scss';
 
 const LivePage = ({ user, match, joinSessionStart }) => {
-  const [key, setKey] = useState('chat');
+  const [isSpeaker, setIsSpeaker] = useState(true);
+  const [key, setKey] = useState('polls');
   const { socket } = user;
 
+  //Create/Join Session
   useEffect(() => {
     if(socket) {
       joinSessionStart(match.params.socketId);
     }
   }, [socket]);
+
+  //Check If Speaker
+  useEffect(() => {
+    if(user) {
+      if(user.socket === match.params.socketId) {
+        setIsSpeaker(true);
+      }
+    }
+  }, [user]);
 
   return (
     <div className="live-page-wrapper">
@@ -38,10 +50,9 @@ const LivePage = ({ user, match, joinSessionStart }) => {
               <Chat />
             </Tab>
             <Tab eventKey="questions" title="Questions">
-
             </Tab>
             <Tab eventKey="polls" title="Polls">
-
+              <Polls isSpeaker={isSpeaker}/>
             </Tab>
           </Tabs>
         </div>

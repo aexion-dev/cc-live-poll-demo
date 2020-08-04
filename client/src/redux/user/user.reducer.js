@@ -3,6 +3,7 @@ import UserActionTypes from './user.types';
 const INITIAL_STATE = {
   displayName: null,
   socket: null,
+  isSpeaker: false,
   error: null
 }
 
