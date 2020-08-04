@@ -50,6 +50,11 @@ const CreatePoll = ({ user, polls, sendPollMessage }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     sendPollMessage(formValues);
+    setShowForm(!showForm);
+    setFormValues({
+      question: "",
+      options: []
+    });
   }
 
   return (
