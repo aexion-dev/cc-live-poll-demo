@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectUser } from '../../redux/user/user.selectors';
 import { selectPolls } from '../../redux/session/session.selectors';
 import { sendPollMessage } from '../../redux/session/session.actions';
 import Button from 'react-bootstrap/Button';
@@ -10,8 +9,7 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Col from 'react-bootstrap/Col';
 
-const CreatePoll = ({ user, polls, sendPollMessage }) => {
-  const [showForm, setShowForm] = useState(false);
+const CreatePoll = ({ user, polls, sendPollMessage, showForm, toggleForm }) => {
   const [formValues, setFormValues] = useState({
     question: "",
     options: []
@@ -26,17 +24,24 @@ const CreatePoll = ({ user, polls, sendPollMessage }) => {
       ...formValues,
       options: {
         ...formValues.options,
-        [event.target.id]: event.target.value
+        [event.target.id]: {
+          content: event.target.value,
+          votes: 0
+        }
       }
     });
   }
 
   const addClick = () => {
+    const test = { text:"blank", votes:0};
     setFormValues({
       ...formValues,
       options: {
         ...formValues.options,
-        [Object.keys(formValues.options).length]: ""
+        [Object.keys(formValues.options).length]: {
+          content: "",
+          votes: 0
+        },
       }
     });
   }
@@ -50,7 +55,7 @@ const CreatePoll = ({ user, polls, sendPollMessage }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     sendPollMessage(formValues);
-    setShowForm(!showForm);
+    toggleForm();
     setFormValues({
       question: "",
       options: []
@@ -59,12 +64,6 @@ const CreatePoll = ({ user, polls, sendPollMessage }) => {
 
   return (
     <div className="new-poll-form d-flex flex-column align-items-center h-100 w-100">
-      {
-        !showForm &&
-        <Button
-          onClick={() => setShowForm(!showForm)}
-          className="toggle-form m-2 w-50">New Poll</Button>
-      }
       {
         showForm &&
           <Form onSubmit={handleSubmit} className="w-100 h-100">
@@ -96,7 +95,7 @@ const CreatePoll = ({ user, polls, sendPollMessage }) => {
                 <Button className="mx-3 rounded-lg" variant="primary" type="submit">
                   Create Poll
                 </Button>
-                <Button onClick={() => setShowForm(!showForm)} className="mx-3 rounded-lg">
+                <Button onClick={() => toggleForm()} className="mx-3 rounded-lg">
                   Cancel
                 </Button>
               </ButtonGroup>

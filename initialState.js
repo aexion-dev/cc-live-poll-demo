@@ -16,7 +16,7 @@ const state = {
       name: "john"
     }
   ],
-  streams: [
+  sessions: [
     0: {
       id: "socketid1",
       url: "example.com/live/:socketid1",
@@ -41,6 +41,7 @@ const state = {
         0: {
           question: "What is your favorite color?",
           time: timestamp,
+          status: null,
           options: [
             0: {
               answer: "Red",

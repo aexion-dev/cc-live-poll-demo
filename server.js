@@ -52,7 +52,7 @@ io.on('connection', (socket) => {
       console.log("Creating New Session ID: ", room);
       const sessionHistory = await session.createSession(room);
       await socket.emit('loadSessionHistory', sessionHistory);
-      socketRoom = room;
+      socketRoom = room;  
     } else {
       console.log("Session Not Found!");
       //need to return client to select screen
