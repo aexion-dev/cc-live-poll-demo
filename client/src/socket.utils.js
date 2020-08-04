@@ -54,24 +54,9 @@ export const joinSession = async (sessionId) => {
   })
 }
 
-export const loadChatHistory = (cb) => {
-  if(!socket)
-    return (true);
-
-  socket.on('joinResponse', msg => {
-    console.log('Join Response received!');
-    return cb(null, msg);
-    });
-}
-
-export const loadSessionHistory = (cb) => {
-  if(!socket)
-    return (true);
-
-  socket.on('joinResponse', msg => {
-    console.log('Join Response received!');
-    return cb(null, msg);
-    });
+export const emitChatMessage = (message) => {
+  if(socket)
+    socket.emit('chat', message);
 }
 
 export const subscribeToChat = (cb) => {
@@ -84,7 +69,12 @@ export const subscribeToChat = (cb) => {
   });
 }
 
-export const sendMessage = (room, message) => {
-  if(socket)
-    socket.emit('chat', { message, room });
+export const loadSessionHistory = (cb) => {
+  if(!socket)
+    return (true);
+
+  socket.on('joinResponse', msg => {
+    console.log('Join Response received!');
+    return cb(null, msg);
+    });
 }

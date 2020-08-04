@@ -3,34 +3,31 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectUser } from '../../redux/user/user.selectors';
 import { selectChat } from '../../redux/session/session.selectors';
-import { sendChatMessage } from '../../redux/session/session.actions';
+import { sendChatMessage, receivedChatMessage } from '../../redux/session/session.actions';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
-import {
-  subscribeToChat,
-  sendMessage } from '../../socket.utils';
+import { subscribeToChat } from '../../socket.utils';
 import './chat.scss';
 
 
-const Chat = ({ user, chat, sendChatMessage }) => {
+const Chat = ({ user, chat, sendChatMessage, receivedChatMessage }) => {
   const [message, setMessage] = useState('');
   const { displayName, socket } = user;
-  //const [chat, setChat] = useState([]);
 
-  // useEffect(() => {
-  //   subscribeToChat((err, data) => {
-  //     if(err)
-  //       return;
-  //
-  //     setChat(oldChats => [data, ...oldChats]);
-  //   });
-  //
-  //   // return () => {
-  //   //   disconnectSocket();
-  //   // }
-  // }, []);
+  useEffect(() => {
+    subscribeToChat((err, data) => {
+      if(err)
+        return;
+      console.log(data);
+      receivedChatMessage(data);
+    });
+
+    // return () => {
+    //   disconnectSocket();
+    // }
+  }, []);
 
   const handleMessage = (msg) => {
     if(!user || !msg | msg.length < 1)
@@ -38,6 +35,7 @@ const Chat = ({ user, chat, sendChatMessage }) => {
 
     const date = new Date();
     sendChatMessage({msg, displayName, senderId: socket, date});
+    setMessage('');
   }
 
   return (
@@ -51,7 +49,7 @@ const Chat = ({ user, chat, sendChatMessage }) => {
               key={idx}>
                 <div className="message-info">
                   <span className="message-info-name" >{displayName}</span>
-                  <span className="message-info-time" >{date.toLocaleString()}</span>
+                  <span className="message-info-time" >{date.toLocaleString('en-US')}</span>
                 </div>
                 <div className="message-body">
                   {msg}
@@ -86,7 +84,8 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  sendChatMessage: (msg) => dispatch(sendChatMessage(msg))
+  sendChatMessage: (msg) => dispatch(sendChatMessage(msg)),
+  receivedChatMessage: (msg) => dispatch(receivedChatMessage(msg)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Chat);

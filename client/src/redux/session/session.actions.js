@@ -19,3 +19,8 @@ export const sendChatMessage = (msg) => ({
   type: SessionActionTypes.SEND_CHAT_MESSAGE,
   payload: msg
 });
+
+export const receivedChatMessage = (msg) => ({
+  type: SessionActionTypes.RECEIVED_CHAT_MESSAGE,
+  payload: msg
+});

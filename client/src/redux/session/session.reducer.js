@@ -27,6 +27,7 @@ const sessionReducer = (state = INITIAL_STATE, action) => {
         error: action.payload
       }
     case SessionActionTypes.SEND_CHAT_MESSAGE:
+    case SessionActionTypes.RECEIVED_CHAT_MESSAGE:
       return {
         ...state,
         currentSession: {

@@ -67,12 +67,10 @@ io.on('connection', (socket) => {
   });
 
   socket.on('chat', (data) => {
-    const { message, room } = data;
-    console.log(`msg: ${message}, room: ${socketRoom}`);
-    socket.broadcast.to(socketRoom).emit('chat', message);
-    socketHistory[socketRoom] = socketHistory[socketRoom]
-      ? [data.message, ...socketHistory[socketRoom]]
-      : [data.message];
+    const { msg, senderId } = data;
+    console.log(`[${senderId}]: ${msg}`);
+    session.updateChat(socketRoom, data);
+    socket.broadcast.to(socketRoom).emit('chat', data);
   });
 });
 

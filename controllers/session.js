@@ -60,6 +60,16 @@ const leaveSession = (userId, sessionId) => {
   state = {...state, sessions: sessions};
 }
 
+const updateChat = (sessionId, message) => {
+  const index = sessions.findIndex(session => session.id === sessionId);
+
+  if(index > -1) {
+    sessions[index].chat.push(message);
+  }
+
+  state = {...state, sessions: sessions}
+}
+
 module.exports = {
   selectIndex,
   sessionExists,
@@ -67,4 +77,5 @@ module.exports = {
   joinSession,
   leaveSession,
   closeSession,
+  updateChat
 }
