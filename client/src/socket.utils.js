@@ -59,6 +59,11 @@ export const emitChatMessage = (message) => {
     socket.emit('chat', message);
 }
 
+export const emitPollMessage = (message) => {
+  if(socket)
+    socket.emit('poll', message);
+}
+
 export const subscribeToChat = (cb) => {
   if(!socket)
     return (true);
@@ -68,6 +73,17 @@ export const subscribeToChat = (cb) => {
     return cb(null, msg);
   });
 }
+
+export const subscribeToPolls = (cb) => {
+  if(!socket)
+    return (true);
+
+  socket.on('poll', msg => {
+    console.log('Websocket event received!');
+    return cb(null, msg);
+  });
+}
+
 
 export const loadSessionHistory = (cb) => {
   if(!socket)

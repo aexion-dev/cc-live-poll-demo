@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { selectUser } from '../../redux/user/user.selectors';
 import { selectPolls } from '../../redux/session/session.selectors';
 import { sendPollMessage } from '../../redux/session/session.actions';
 import Button from 'react-bootstrap/Button';
@@ -14,6 +15,7 @@ const CreatePoll = ({ user, polls, sendPollMessage, showForm, toggleForm }) => {
     question: "",
     options: []
   });
+  const { socket } = user;
 
   const handleChange = (event) => {
     setFormValues({...formValues, question: event.target.value});
@@ -54,7 +56,11 @@ const CreatePoll = ({ user, polls, sendPollMessage, showForm, toggleForm }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    sendPollMessage(formValues);
+    sendPollMessage({
+      ...formValues,
+      senderId: socket,
+      voteComplete: false
+    });
     toggleForm();
     setFormValues({
       question: "",
@@ -107,7 +113,8 @@ const CreatePoll = ({ user, polls, sendPollMessage, showForm, toggleForm }) => {
 }
 
 const mapStateToProps = createStructuredSelector({
-  polls: selectPolls
+  polls: selectPolls,
+  user: selectUser
 });
 
 const mapDispatchToProps = (dispatch) => ({

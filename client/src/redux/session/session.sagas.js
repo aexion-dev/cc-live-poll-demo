@@ -24,12 +24,11 @@ export function* chatMessageSent({ payload }) {
 }
 
 export function* pollMessageSent({ payload }) {
-  console.log('yes');
-  // try {
-  //   yield emitPollMessage(payload);
-  // } catch(error) {
-  //   console.log(error);
-  // }
+  try {
+    yield emitPollMessage(payload);
+  } catch(error) {
+    console.log(error);
+  }
 }
 
 export function* onJoinSessionStart() {

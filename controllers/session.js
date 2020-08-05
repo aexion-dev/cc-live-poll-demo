@@ -70,6 +70,15 @@ const updateChat = (sessionId, message) => {
   state = {...state, sessions: sessions}
 }
 
+const updatePolls = (sessionId, data) => {
+  const index = sessions.findIndex(session => session.id === sessionId);
+  if(index > -1) {
+    sessions[index].polls.push(data);
+  }
+
+  state = {...state, sessions: sessions}
+}
+
 module.exports = {
   selectIndex,
   sessionExists,
@@ -77,5 +86,6 @@ module.exports = {
   joinSession,
   leaveSession,
   closeSession,
-  updateChat
+  updateChat,
+  updatePolls
 }
