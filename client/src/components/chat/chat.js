@@ -17,17 +17,19 @@ const Chat = ({ user, chat, sendChatMessage, receivedChatMessage }) => {
   const { displayName, socket } = user;
 
   useEffect(() => {
+
     subscribeToChat((err, data) => {
-      if(err)
+      if(err) {
         return;
-      console.log(data);
+      }
+
       receivedChatMessage(data);
     });
-
+    //
     // return () => {
     //   disconnectSocket();
     // }
-  }, []);
+  }, [socket]);
 
   const handleMessage = (msg) => {
     if(!user || !msg | msg.length < 1)

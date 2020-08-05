@@ -59,7 +59,8 @@ const CreatePoll = ({ user, polls, sendPollMessage, showForm, toggleForm }) => {
     sendPollMessage({
       ...formValues,
       senderId: socket,
-      voteComplete: false
+      voteComplete: false,
+      totalVotes: 0
     });
     toggleForm();
     setFormValues({

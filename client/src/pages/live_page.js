@@ -10,8 +10,8 @@ import Tab from 'react-bootstrap/Tab';
 import './live_page.scss';
 
 const LivePage = ({ user, match, joinSessionStart }) => {
-  const [isSpeaker, setIsSpeaker] = useState(true);
-  const [key, setKey] = useState('polls');
+  const [isSpeaker, setIsSpeaker] = useState(false);
+  const [key, setKey] = useState('chat');
   const { socket } = user;
 
   //Create/Join Session

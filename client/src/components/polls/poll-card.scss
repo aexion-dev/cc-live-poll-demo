@@ -1,0 +1,28 @@
+.card-content {
+  .option-progress {
+    position: relative;
+    align-items: center;
+
+    .option-content {
+      position: absolute;
+      color: #013369;
+      left: 10px;
+      font-size: 14px;
+    }
+    .progress {
+      height: 2rem;
+      background: none;
+
+      .progress-bar {
+        background-color: #007bff36;
+      }
+    }
+    .percent {
+      position: absolute;
+      right: 15px;
+      display: flex;
+      color: #007bff;
+      font-size: 16px;
+    }
+  }
+}
