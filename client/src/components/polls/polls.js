@@ -31,9 +31,9 @@ const Polls = ({ user, polls, isSpeaker, receivedPollMessage }) => {
   return (
     <div className="polls p-4 d-flex flex-column h-100">
     { !showForm &&
-      polls.map(({question, options, totalVotes}, i) => (
+      polls.map((poll, i) => (
         <div key={i}>
-          <PollCard index={i} question={question} options={options} totalVotes={totalVotes}/>
+          <PollCard poll={poll} isSpeaker={isSpeaker}/>
         </div>
       ))
     }

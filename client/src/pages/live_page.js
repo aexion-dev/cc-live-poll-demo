@@ -11,7 +11,7 @@ import './live_page.scss';
 
 const LivePage = ({ user, match, joinSessionStart }) => {
   const [isSpeaker, setIsSpeaker] = useState(false);
-  const [key, setKey] = useState('chat');
+  const [key, setKey] = useState('poll');
   const { socket } = user;
 
   //Create/Join Session

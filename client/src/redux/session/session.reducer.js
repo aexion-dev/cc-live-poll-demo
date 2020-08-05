@@ -18,7 +18,18 @@ const sessionReducer = (state = INITIAL_STATE, action) => {
     case SessionActionTypes.JOIN_SESSION_SUCCESS:
       return {
         ...state,
-        currentSession: action.payload,
+        currentSession: { ...action.payload, polls:       [{
+                options: [
+                  {content: "Good", votes: 0},
+                  {content: "Bad", votes: 0},
+                  {content: "Not sure", votes: 0},
+                  {content: "Fantastic", votes: 0},
+                ],
+                question: "How are you feeling today?",
+                senderId: "1234",
+                totalVotes: 0,
+                voteComplete: false
+              }] },
         error: null
       }
     case SessionActionTypes.JOIN_SESSION_FAILURE:
