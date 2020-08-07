@@ -34,3 +34,8 @@ export const receivedPollMessage = (msg) => ({
   type: SessionActionTypes.RECEIVED_POLL_MESSAGE,
   payload: msg
 });
+
+export const sendVoteMessage = (msg) => ({
+  type: SessionActionTypes.SEND_VOTE_MESSAGE,
+  payload: msg
+});

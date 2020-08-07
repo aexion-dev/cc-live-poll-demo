@@ -33,7 +33,7 @@ const Polls = ({ user, polls, isSpeaker, receivedPollMessage }) => {
     { !showForm &&
       polls.map((poll, i) => (
         <div key={i}>
-          <PollCard poll={poll} isSpeaker={isSpeaker}/>
+          <PollCard poll={poll} isSpeaker={isSpeaker} index={i} />
         </div>
       ))
     }

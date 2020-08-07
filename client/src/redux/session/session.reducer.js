@@ -1,4 +1,5 @@
 import SessionActionTypes from './session.types';
+import { addVoteToPoll } from './session.utils';
 
 const INITIAL_STATE = {
   currentSession: {
@@ -18,18 +19,7 @@ const sessionReducer = (state = INITIAL_STATE, action) => {
     case SessionActionTypes.JOIN_SESSION_SUCCESS:
       return {
         ...state,
-        currentSession: { ...action.payload, polls:       [{
-                options: [
-                  {content: "Good", votes: 0},
-                  {content: "Bad", votes: 0},
-                  {content: "Not sure", votes: 0},
-                  {content: "Fantastic", votes: 0},
-                ],
-                question: "How are you feeling today?",
-                senderId: "1234",
-                totalVotes: 0,
-                voteComplete: false
-              }] },
+        currentSession: action.payload,
         error: null
       }
     case SessionActionTypes.JOIN_SESSION_FAILURE:
@@ -60,6 +50,18 @@ const sessionReducer = (state = INITIAL_STATE, action) => {
               ...state.currentSession.polls,
               action.payload
             ]
+          },
+          error: null
+        }
+      case SessionActionTypes.SEND_VOTE_MESSAGE:
+        return {
+          ...state,
+          currentSession: {
+            ...state.currentSession,
+            polls: addVoteToPoll(
+              state.currentSession.polls,
+              action.payload
+            )
           },
           error: null
         }

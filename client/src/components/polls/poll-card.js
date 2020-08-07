@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { sendVoteMessage } from '../../redux/session/session.actions';
 import Card from 'react-bootstrap/Card';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import Form from 'react-bootstrap/Form';
 import './poll-card.scss';
 
-const PollCard = ({ poll, index, isSpeaker }) => {
+const PollCard = ({ poll, index, isSpeaker, sendVoteMessage }) => {
   const [answer, setAnswer] = useState(0);
   const [completed, setCompleted] = useState(false);
   const { question, options, totalVotes } = poll;
@@ -18,12 +20,13 @@ const PollCard = ({ poll, index, isSpeaker }) => {
   }
 
   const handleChange = (event) => {
-    setAnswer(event.target.value);
+    setAnswer(parseInt(event.target.value));
   }
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(responses[answer]);
+    sendVoteMessage({ pollIndex: index, answerIndex: answer });
+    console.log(index, answer);
     setCompleted(true);
   }
 
@@ -34,8 +37,8 @@ const PollCard = ({ poll, index, isSpeaker }) => {
             { (isSpeaker || completed) &&
                 responses.map(({content, votes}, i) => (
                   <div className="option-progress d-flex flex-row" key={i}>
-                    <div className="option-content">{`${content} (${totalVotes})`}</div>
-                    <ProgressBar className="w-100 my-2" now={votes} />
+                    <div className="option-content">{`${content} (${votes})`}</div>
+                    <ProgressBar className="w-100 my-2" now={percentage(votes, totalVotes)} />
                     <div className="percent">{`${percentage(votes, totalVotes)}%`}</div>
                   </div>
                 ))
@@ -50,7 +53,7 @@ const PollCard = ({ poll, index, isSpeaker }) => {
                           type="radio"
                           name={`poll-card-${index}`}
                           value={i}
-                          checked={answer == i}
+                          checked={answer === i}
                           onChange={handleChange}
                           className="form-check-input"
                         />
@@ -71,4 +74,8 @@ const PollCard = ({ poll, index, isSpeaker }) => {
   )
 }
 
-export default PollCard;
+const mapDispatchToProps = (dispatch) => ({
+  sendVoteMessage: (msg) => dispatch(sendVoteMessage(msg))
+});
+
+export default connect(null, mapDispatchToProps)(PollCard);
