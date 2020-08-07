@@ -64,6 +64,11 @@ export const emitPollMessage = (message) => {
     socket.emit('poll', message);
 }
 
+export const emitVoteMessage = (message) => {
+  if(socket)
+    socket.emit('vote', message);
+}
+
 export const subscribeToChat = (cb) => {
   if(!socket)
     return (true);
@@ -80,7 +85,12 @@ export const subscribeToPolls = (cb) => {
 
   socket.on('poll', msg => {
     console.log('Websocket event received!');
-    return cb(null, msg);
+    return cb(null, msg, 'poll');
+  });
+
+  socket.on('vote', msg => {
+    console.log('Websocket event received!');
+    return cb(null, msg, 'vote');
   });
 }
 

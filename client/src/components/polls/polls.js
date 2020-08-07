@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { receivedPollMessage } from '../../redux/session/session.actions';
+import { receivedPollMessage, receivedVoteMessage } from '../../redux/session/session.actions';
 import { selectUser } from '../../redux/user/user.selectors';
 import { selectPolls } from '../../redux/session/session.selectors';
 import { subscribeToPolls } from '../../socket.utils';
@@ -11,16 +11,20 @@ import Button from 'react-bootstrap/Button';
 import './polls.scss';
 
 
-const Polls = ({ user, polls, isSpeaker, receivedPollMessage }) => {
+const Polls = ({ user, polls, isSpeaker, receivedPollMessage, receivedVoteMessage }) => {
   const [showForm, setShowForm] = useState(false);
   const { displayName, socket } = user;
 
   useEffect(() => {
-    subscribeToPolls((err, data) => {
+    subscribeToPolls((err, data, type) => {
       if(err)
         return;
 
-      receivedPollMessage(data);
+      if (type === 'poll') {
+        receivedPollMessage(data);
+      } else if (type === 'vote') {
+        receivedVoteMessage(data);
+      }
     });
 
     // return () => {
@@ -57,7 +61,8 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  receivedPollMessage: (msg) => dispatch(receivedPollMessage(msg))
+  receivedPollMessage: (msg) => dispatch(receivedPollMessage(msg)),
+  receivedVoteMessage: (msg) => dispatch(receivedVoteMessage(msg))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Polls);

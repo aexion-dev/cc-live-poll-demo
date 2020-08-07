@@ -54,6 +54,7 @@ const sessionReducer = (state = INITIAL_STATE, action) => {
           error: null
         }
       case SessionActionTypes.SEND_VOTE_MESSAGE:
+      case SessionActionTypes.RECEIVED_VOTE_MESSAGE:
         return {
           ...state,
           currentSession: {

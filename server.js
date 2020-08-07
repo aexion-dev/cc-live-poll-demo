@@ -79,6 +79,12 @@ io.on('connection', (socket) => {
     session.updatePolls(socketRoom, data);
     socket.broadcast.to(socketRoom).emit('poll', data);
   });
+
+  socket.on('vote', (data) => {
+    console.log(`[${socket.id}]: Sent Vote`);
+    session.updateVotes(socketRoom, data);
+    socket.broadcast.to(socketRoom).emit('vote', data);
+  });
 });
 
 server.listen(port, error => {

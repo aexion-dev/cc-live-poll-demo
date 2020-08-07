@@ -14,7 +14,7 @@ const PollCard = ({ poll, index, isSpeaker, sendVoteMessage }) => {
 
   const percentage = (partial, total) => {
     if(total > 0)
-     return (100 * partial) / total;
+     return ((100 * partial) / total).toFixed(1);
 
     return 0;
   }
@@ -26,7 +26,6 @@ const PollCard = ({ poll, index, isSpeaker, sendVoteMessage }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     sendVoteMessage({ pollIndex: index, answerIndex: answer });
-    console.log(index, answer);
     setCompleted(true);
   }
 

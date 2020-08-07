@@ -79,6 +79,30 @@ const updatePolls = (sessionId, data) => {
   state = {...state, sessions: sessions}
 }
 
+const updateVotes = (sessionId, data) => {
+  const index = sessions.findIndex(session => session.id === sessionId);
+  const { pollIndex, answerIndex } = data;
+
+  if(index > -1) {
+    sessions[index].polls = sessions[index].polls.map((poll, i) =>
+      i === pollIndex
+      ? {
+          ...poll,
+          totalVotes: poll.totalVotes + 1,
+          options: Object.fromEntries(Object.entries(poll.options)
+            .map(([k, v]) =>
+              parseInt(k) === answerIndex
+              ? [k, {...v, votes: v.votes + 1}]
+              : [k, v]
+            ))
+        }
+      : poll
+    );
+  }
+
+  state = {...state, sessions: sessions}
+}
+
 module.exports = {
   selectIndex,
   sessionExists,
@@ -87,5 +111,6 @@ module.exports = {
   leaveSession,
   closeSession,
   updateChat,
-  updatePolls
+  updatePolls,
+  updateVotes
 }
