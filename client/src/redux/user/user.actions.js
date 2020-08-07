@@ -1,8 +1,18 @@
 import UserActionTypes from './user.types';
 
-export const setDisplayName = (name) => ({
-  type: UserActionTypes.SET_USER_NAME,
+export const createUserStart = (name) => ({
+  type: UserActionTypes.CREATE_USER_START,
   payload: name
+});
+
+export const createUserSuccess = (user) => ({
+  type: UserActionTypes.CREATE_USER_SUCCESS,
+  payload: user
+});
+
+export const createUserFailure = (error) => ({
+  type: UserActionTypes.CREATE_USER_FAILURE,
+  payload: error
 });
 
 export const connectUserStart = (user) => ({

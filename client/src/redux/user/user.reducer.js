@@ -1,18 +1,20 @@
 import UserActionTypes from './user.types';
 
 const INITIAL_STATE = {
+  id: null,
   displayName: null,
   socket: null,
-  isSpeaker: false,
   error: null
 }
 
 const userReducer = (state = INITIAL_STATE, action) => {
   switch(action.type) {
-    case UserActionTypes.SET_USER_NAME:
+    case UserActionTypes.CREATE_USER_SUCCESS:
       return {
         ...state,
-        displayName: action.payload,
+        id: action.payload.id,
+        displayName: action.payload.name,
+        error: null
       }
     case UserActionTypes.CONNECT_USER_SUCCESS:
       return {
@@ -29,11 +31,11 @@ const userReducer = (state = INITIAL_STATE, action) => {
     case UserActionTypes.DISCONNECT_USER_SUCCESS:
       return {
         ...state,
-        displayName: null,
         socket: null,
         error: null
       }
     case UserActionTypes.DISCONNECT_USER_FAILURE:
+    case UserActionTypes.CREATE_USER_FAILURE:
       return {
         ...state,
         error: action.payload

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { setDisplayName } from '../redux/user/user.actions';
+import { createUserStart } from '../redux/user/user.actions';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -9,7 +9,7 @@ import Button from 'react-bootstrap/button';
 import Form from 'react-bootstrap/Form';
 import './home_page.scss';
 
-const HomePage = ({ setDisplayName, history, match }) => {
+const HomePage = ({ createUserStart, history, match }) => {
   const [formState, setFormState] = useState({
     name: ''
   });
@@ -22,7 +22,7 @@ const HomePage = ({ setDisplayName, history, match }) => {
     const form = event.currentTarget;
 
     if (form.checkValidity() === true) {
-      setDisplayName(name);
+      createUserStart(name);
       history.push(`${match.url}live`);
     }
 
@@ -71,7 +71,7 @@ const HomePage = ({ setDisplayName, history, match }) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  setDisplayName: (name) => dispatch(setDisplayName(name))
+  createUserStart: (name) => dispatch(createUserStart(name))
 });
 
 export default withRouter(connect(null, mapDispatchToProps)(HomePage));
