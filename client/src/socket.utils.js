@@ -8,6 +8,7 @@ export const initiateSocket = async () => {
 
     socket.on('connect', () => {
       resolve(socket.id);
+      socket.emit('connectionSuccess', socket.id);
     });
   })
 }
@@ -20,11 +21,11 @@ export const disconnectSocket = () => {
     socket.disconnect();
 }
 
-export const loadSessionList = (cb) => {
+export const loadSessionsList = (cb) => {
   if(!socket)
     return (true);
 
-  socket.on('loadSessions', msg => {
+  socket.on('loadSessionsList', msg => {
     console.log('Recieved Sessions List!');
     return cb(null, msg);
     });
@@ -40,12 +41,12 @@ export const subscribeToSessionList = (cb) => {
   })
 }
 
-export const joinSession = async (sessionId) => {
+export const joinSession = async (sessionId, topic, speaker) => {
   return new Promise((resolve, reject) => {
     console.log(`Joining room ${sessionId}..`);
 
     if(socket && sessionId) {
-      socket.emit('join', sessionId);
+      socket.emit('join', sessionId, topic, speaker);
 
       socket.on('loadSessionHistory', (data) => {
         resolve(data);

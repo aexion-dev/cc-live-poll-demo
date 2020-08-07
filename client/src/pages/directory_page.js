@@ -26,6 +26,7 @@ const Directory = ({ user, connectUserStart, disconnectUserStart, match }) => {
     <div className="directory-page">
       <Route exact path={`${match.path}`} component={SelectMode} />
       <Route exact path={`${match.path}/:socketId`} component={LivePage} />
+      <Route exact path={`${match.path}/:socketId/:topic/:speaker`} component={LivePage} />
     </div>
   );
 }

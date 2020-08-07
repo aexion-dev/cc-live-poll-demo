@@ -17,7 +17,8 @@ const LivePage = ({ user, match, joinSessionStart }) => {
   //Create/Join Session
   useEffect(() => {
     if(socket) {
-      joinSessionStart(match.params.socketId);
+      const { socketId, topic, speaker } = match.params;
+      joinSessionStart(socketId, topic, speaker);
     }
   }, [socket]);
 
@@ -66,7 +67,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  joinSessionStart: (sessionId) => dispatch(joinSessionStart({sessionId}))
+  joinSessionStart: (sessionId, topic, speaker) => dispatch(joinSessionStart({sessionId, topic, speaker}))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LivePage);

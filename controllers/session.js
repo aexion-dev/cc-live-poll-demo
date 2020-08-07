@@ -14,11 +14,11 @@ const sessionExists = (sessionId) => {
   return false;
 };
 
-const createSession = (sessionId) => {
+const createSession = (sessionId, topic, speaker) => {
     const newSession = {
       id: sessionId,
-      name: null,
-      owner: null,
+      topic: topic ? topic : null,
+      speaker: speaker ? speaker : null,
       users: [sessionId],
       chat: [],
       questions: [],

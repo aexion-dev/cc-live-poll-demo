@@ -10,9 +10,10 @@ import {
   joinSessionFailure,
 } from './session.actions';
 
-export function* joinSessionStart({ payload: { sessionId }}) {
+export function* joinSessionStart({ payload: { sessionId, topic, speaker }}) {
   try {
-    const session = yield joinSession(sessionId);
+    const session = yield joinSession(sessionId, topic, speaker);
+    console.log(session);
     yield put(joinSessionSuccess(session));
   } catch(error) {
     put(joinSessionFailure(error));

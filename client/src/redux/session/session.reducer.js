@@ -4,8 +4,8 @@ import { addVoteToPoll } from './session.utils';
 const INITIAL_STATE = {
   currentSession: {
     id: null,
-    name: null,
-    owner: null,
+    topic: null,
+    speaker: null,
     users: [],
     chat: [],
     questions: [],

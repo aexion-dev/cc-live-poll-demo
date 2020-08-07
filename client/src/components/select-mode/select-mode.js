@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectUser } from '../../redux/user/user.selectors';
 import { withRouter } from 'react-router-dom';
-import { loadSessionList, subscribeToSessionList } from '../../socket.utils';
+import { loadSessionsList, subscribeToSessionList } from '../../socket.utils';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -35,16 +35,17 @@ const streams = [
 
 const SelectMode = ({ user, history, match }) => {
   const [sessions, setSessions] = useState([]);
+  const { socket, displayName } = user;
 
-  //Load Room's Chat History
+  //Load Sessions List
   useEffect(() => {
-    loadSessionList((err, data) => {
+    loadSessionsList((err, data) => {
       if(err || !data)
         return;
-
+      console.log(data);
       setSessions(data);
     })
-  }, [])
+  },[socket]);
 
   useEffect(() => {
     subscribeToSessionList((err, data) => {
@@ -57,13 +58,13 @@ const SelectMode = ({ user, history, match }) => {
 
   const handleCreateSession = (formData) => {
     //Send User To Link
-    const { name } = formData;
-    console.log(user);
-    history.push(`${match.url}/${user.socket}`);
+    const [{ topic }] = formData;
+    history.push(`${match.url}/${user.socket}/${topic}/${displayName}`);
   }
 
-  const handleJoinSession = () => {
-
+  const handleJoinSession = (idx) => {
+    const { id } = sessions[idx];
+    history.push(`${match.url}/${id}`);
   }
 
   return (
@@ -76,7 +77,7 @@ const SelectMode = ({ user, history, match }) => {
               <CustomForm
                 formData={[
                 {
-                  name: "name",
+                  name: "topic",
                   label: "Enter Session Topic",
                   placeholder: "Health Benefits",
                   required: true
@@ -100,13 +101,16 @@ const SelectMode = ({ user, history, match }) => {
                 </thead>
                 <tbody>
                   {
-                    streams.map((stream, idx) => (
+                    sessions.map((session, idx) => (
                       <tr key={idx}>
-                        <td>{stream.id}</td>
-                        <td>{stream.name}</td>
-                        <td>{stream.speaker}</td>
+                        <td>{idx + 1}</td>
+                        <td>{session.topic}</td>
+                        <td>{session.speaker}</td>
                         <td>
-                          <Button size="sm" className="px-4">Join</Button>
+                          <Button
+                            size="sm"
+                            className="px-4"
+                            onClick={() => handleJoinSession(idx)}>Join</Button>
                         </td>
                       </tr>
                     ))

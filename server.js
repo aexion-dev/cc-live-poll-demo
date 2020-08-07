@@ -49,7 +49,7 @@ io.on('connection', (socket) => {
     socketRoom = null;
   });
 
-  socket.on('join', async (room) => {
+  socket.on('join', async (room, topic, speaker) => {
     console.log(`Client ${socket.id} is joining Session ${room}`)
     const index = session.selectIndex(room);
 
@@ -61,7 +61,7 @@ io.on('connection', (socket) => {
       socketRoom = room;
     } else if (room === socket.id) {
       console.log("Creating New Session ID: ", room);
-      const sessionHistory = await session.createSession(room);
+      const sessionHistory = await session.createSession(room, topic, speaker);
       await socket.emit('loadSessionHistory', sessionHistory);
       socketRoom = room;
     } else {
@@ -75,6 +75,10 @@ io.on('connection', (socket) => {
       socket.leave(room);
       socketRoom = null;
     }
+  });
+
+  socket.on('connectionSuccess', (data) => {
+    socket.emit('loadSessionsList', state.sessions);
   });
 
   socket.on('chat', (data) => {
